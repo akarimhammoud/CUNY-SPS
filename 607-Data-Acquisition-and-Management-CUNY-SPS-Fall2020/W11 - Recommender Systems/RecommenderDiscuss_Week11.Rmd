@@ -1,0 +1,68 @@
+---
+title: "607 - W11 Discussion:  Recommender Systems "
+author: "Karim Hammoud"
+output:
+  html_document:
+    theme: lumen
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Intro
+
+Your task is to analyze an existing recommender system that you find interesting.  You should:
+
+1.  Perform a Scenario Design analysis as described below. Consider whether it makes sense for your selected recommender system to perform scenario design twice, once for the organization and once for the organization's customers.
+
+2.  Attempt to reverse engineer what you can about the site, from the site interface and any available information that you can find on the Internet or elsewhere.
+
+3.  Include specific recommendations about how to improve the site's recommendation capabilities going forward. 
+
+# Overview
+
+I will analyze the recommender system for Nordstrom's Trunk Club fashion website.
+
+Trunk Club is a personalized mid to high-end men's and women's clothing service based in Chicago, Illinois, United States.
+
+How it works: "Each customer take a quiz and fill out a profile, once done then they can work with a styling specialist who curates clothing for their box (called a "trunk"), which is shipped to their home or office; the customer can then either keep the clothes or send items back to Trunk Club, with billing occurring at the end of the process for any kept items."
+
+Check the resourses [https://www.whattopack.com/shop/trunk-club-review/](https://www.whattopack.com/shop/trunk-club-review/)
+
+# Scenario Design
+
+* Who are your target users?  
+    * Busy buyers with mid and high income who either don't want to shop or don't have time to shop.
+    
+* What are their key goals? 
+    * The users are looking quick and easy way to make transactions and improve thier shopping experience through fashion. 
+    
+* How can you help them accomplish those goals? 
+    * Trunk club helps users accomplish their goals by solving that dilemma for the fashion industry by using larg amounts of data to connect customers with the items they like the most. 
+    
+# Attempt to Reverse Engineer the Recommender System
+
+There are really good contents to improve the algorithms and process but __How does engineering and technical practices work at the Trunk Club?__
+
+1)  Shoppers select image or chose image of fashion they prefer.
+2)  The system vectoring images and compare to inventory of data and images using convolutional neural nets
+3)  Pass to Trunk Club specialist for a review of predicted selection for the shoppers.
+4)  If the specialist didnt hear from the customer any feedback,Trunk Club uses a parallel "labs" have the ability of giving the stylist a feedback.
+5)  Then the shopper gets the items and responds, if they like the clothing it gets sent to the cutomer for hand review.  
+
+__The ways to improve the recommendation engine in general:__ Once the machine learning starts we combine all of algorithms for different the sub tasks and use the neural nets, collaborative filtering, a lot of effects models, naïve Bayes, etc. 
+
+The first push of recommending fashions and styles for customers. and since machines  sometimes are more efficient than humans we can leverage them for the rote calculations in our process. We leave the other types of activities - like improvising, fostering a relationship with the customer, synthesizing ambient information, applying empathy - to humans. 
+
+The The next step is more logistics for shipping and delivering. It’s a part of labor. as of the modeled after Daniel Kahneman’s two systems of thinking in Thinking, Fast and Slow. The machines take the calculations and probabilities; the humans take the intuition. But always both have to work together,\."  
+
+Check these two sourse: Part 1 [https://medium.com/unpacking-trunk-club/recommendation-systems-at-trunk-club-overview-part-1-cc5783e5ff4b](https://medium.com/unpacking-trunk-club/recommendation-systems-at-trunk-club-overview-part-1-cc5783e5ff4b)
+
+Part 2 [https://medium.com/unpacking-trunk-club/recommendation-systems-at-trunk-club-algorithms-challenges-and-future-outlook-part-2-afdda5d69bae](https://medium.com/unpacking-trunk-club/recommendation-systems-at-trunk-club-algorithms-challenges-and-future-outlook-part-2-afdda5d69bae)
+
+# Next Steps
+
+**Since Trunk Club is effectively marrying research with pragmatism by pushing the boundaries of data science in fashion retail, there still be some challenges but they are trying to tackle down the algorithms to help providing better customer's experiences.**
+
+![Here is a snipp of Trunk Club](https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/607-Data-Acquisition-and-Management-CUNY-SPS-Fall2020/W11%20-%20Recommender%20Systems/1.png)
