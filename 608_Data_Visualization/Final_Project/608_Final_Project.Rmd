@@ -1,0 +1,77 @@
+---
+title: "608_Final_Project"
+author: "Karim Hammoud"
+output:
+  pdf_document:
+    latex_engine: xelatex
+  html_document: default
+---
+
+# The main prupose of this data is to explore the pollution data and understand the insights, the risk factors and deaths related to that.
+
+Per Wikipedia `Air pollution is the presence of substances in the atmosphere that are harmful to the health of humans and other living beings, or cause damage to the climate or to materials. There are many different types of air pollutants, such as gases (including ammonia, carbon monoxide, sulfur dioxide, nitrous oxides, methane, carbon dioxide and chlorofluorocarbons), particulates (both organic and inorganic), and biological molecules. Air pollution may cause diseases, allergies and even death to humans; it may also cause harm to other living organisms such as animals and food crops, and may damage the natural environment (for example, climate change, ozone depletion or habitat degradation) or built environment (for example, acid rain). Both human activity and natural processes can generate air pollution.`
+
+# In this project I will build a shiny app for the data to show the pollution per country and year.
+
+# I acquired the data from Kaggle you can check it [here]("https://www.kaggle.com/pavan9065/air-pollution) the data consists of the Country and the number of deaths due to pollution and other factors.
+
+
+# Another thing I would like to analyze the risk factors and deaths and show visualization of them
+
+
+# read the data
+
+
+```{r}
+total <- read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/608_Data_Visualization/Final_Project/Data/death-rates-total-air-pollution.csv")
+
+factor <- read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/608_Data_Visualization/Final_Project/Data/number-of-deaths-by-risk-factor.csv")
+
+death <- read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/608_Data_Visualization/Final_Project/Data/death-rates-from-air-pollution.csv")
+
+share_deaths <- read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/608_Data_Visualization/Final_Project/Data/share-deaths-air-pollution.csv")
+```
+
+
+# Lets see the summary of the factors table
+```{r}
+summary(factor)
+```
+
+
+# Lets see the summary of the share deaths 
+```{r}
+names(share_deaths)[4] <- "total"
+
+summary(share_deaths)
+```
+
+Now lets plot the top 20 areas with share of death caused of Air Pollution in 20
+
+```{r}
+library(tidyverse)
+
+# filter just 2017
+share_deaths1 <- share_deaths[share_deaths$Year == "2017",]
+
+# get the top 20
+share_deaths2 <- share_deaths1 %>% top_n(20)
+share_deaths2
+
+# plot them
+ggplot(data = share_deaths2, aes(x = total, y = Entity)) +
+  geom_point(axes=FALSE) +
+  labs(title = "Top 20 areas with share of death")
+
+```
+
+
+# Here we can ssee the top 20 areas and countires with Air Pullotions.
+
+# This project seems really interesting especially in what we see in clmate change and other factors are effecting our planet.
+
+
+
+
+
+
