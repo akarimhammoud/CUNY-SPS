@@ -2,7 +2,7 @@
 
 ## You can access the [Visualization here](https://karimhammoud.shinyapps.io/final1/)
 
-## You can access the [Video here](https://karimhammoud.shinyapps.io/final1/)
+## You can access the [Video here](https://www.youtube.com/watch?v=Co0JxSqf5JI)
 
 ## About the Project
 
