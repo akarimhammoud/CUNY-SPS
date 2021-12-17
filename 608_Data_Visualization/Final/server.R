@@ -123,19 +123,46 @@ library(tidyverse)
 library(reshape2)
 library(leaflet)
 
+# Read the data
 
 df <-  read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master/608_Data_Visualization/Final_Project/Data/share-deaths-air-pollution.csv")
+
+# Change the name of the column Deaths - Air pollution - Sex: Both - Age: Age-standardized (Rate) to total.
 
 names(df)[4] <- "Total"
 
 
-# Need to Rank
+
+# Rank them per year.
 df$Rank <-  df$Year %>%
   rank() %>%
   round(0)
 
-df$Rank <- max(df$Rank+1) - df$Rank
+df$Rank <- min(df$Rank+1) 
 
+
+
+
+# Now we need to calculate the top 20 countries that improved in the last 27 years 
+# Create new data for 1990
+country1990 <- df %>% 
+  filter(Year == 1990) 
+
+# Create new data for 2017
+country2017 <- df %>% 
+  filter(Year == 2017) 
+
+
+# calcualte the improve rate in the past 27 years from 1990 to 2017
+country2017$improve <- round(country2017$Total / country1990$Total, digits=2)
+
+# Top countries that improved in the last 27 years.
+Top20 <-  country2017[order(country2017$improve),]
+Top20 <- head(Top20,20)
+
+# Least countries that improved in the last 27 years.
+Least20 <- country2017[order(-country2017$improve),]
+Least20 <- head(Least20,20)
 
 
 # This is a Shiny web application. You can run the application by clicking
@@ -145,8 +172,7 @@ df$Rank <- max(df$Rank+1) - df$Rank
 #
 #    http://shiny.rstudio.com/
 
-
-
+xform <- list(categoryorder = "array")
 
 
 
@@ -161,6 +187,7 @@ server <- function(input, output) {
       arrange(Rank)
   })
   
+
   
   # Plot using plot.ly  ----
   output$plot1 <- renderPlotly({
@@ -173,10 +200,21 @@ server <- function(input, output) {
              yaxis = list(title = "Air Pollution Death Rate"))
   })
   
+  
+  output$plot2 <- renderPlotly({
+    
+    plot_ly(Top20, x = ~improve, y = ~Entity) %>% 
+      layout(yaxis = list(categoryarray = names, categoryorder = "array"))
+  })
+  
+  output$plot3 <- renderPlotly({
+    
+    plot_ly(Least20, x = ~ improve , y = ~ Entity) %>% 
+      layout(yaxis = list(categoryarray = names, categoryorder = "array"))
+  })
   # Generate a summary of the data ----
   output$MyRanks <- renderTable({
     head(selectedData()[,c(-1,-3)],5) # Generate top 5 Ranks of selected columns
   })
   
 }
-

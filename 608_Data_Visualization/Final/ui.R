@@ -135,12 +135,37 @@ df <-  read.csv("https://raw.githubusercontent.com/akarimhammoud/CUNY-SPS/master
 names(df)[4] <- "Total"
 
 
-# Need to Rank
+# Rank them per year.
 df$Rank <-  df$Year %>%
   rank() %>%
   round(0)
 
-df$Rank <- max(df$Rank+1) - df$Rank
+df$Rank <- min(df$Rank+1) 
+
+
+
+
+# Now we need to calculate the top 20 countries that improved in the last 27 years 
+# Create new data for 1990
+country1990 <- df %>% 
+  filter(Year == 1990) 
+
+# Create new data for 2017
+country2017 <- df %>% 
+  filter(Year == 2017) 
+
+
+# calcualte the improve rate in the past 27 years from 1990 to 2017
+country2017$improve <- round(country2017$Total / country1990$Total, digits=2)
+
+# Top countries that improved in the last 27 years.
+Top20 <-  country2017[order(country2017$improve),]
+Top20 <- head(Top20,20)
+
+# Least countries that improved in the last 27 years.
+Least20 <- country2017[order(-country2017$improve),]
+Least20 <- head(Least20,20)
+
 
 
 
@@ -153,31 +178,31 @@ df$Rank <- max(df$Rank+1) - df$Rank
 
 # Define UI for application that draws a histogram
 ui <- fluidPage(
-  navbarPage("Global Air Poluttion", id="main", theme = shinytheme("lumen"),
+  navbarPage("Global Air Pollution", id="main", theme = shinytheme("lumen"),
              
              tabPanel("About", fluid = TRUE,column(6,
                                                    #br(),
-                                                   h4(p("Global Air Poluttion in The Last 20-30 Years")),
+                                                   h4(p("Global Air Pollution from 1990 to 2017")),
                                                    h4(p("About the Project")),
                                                    h5(p("")),
-                                                   h5(p("The main prupose of this data is to explore the pollution data and understand the insights, the risk factors and deaths related to that.")),
+                                                   h5(p("The main purpose of this data is to explore the pollution data and understand the insights, the risk factors and deaths related to that.")),
                                                    h5(p("Per Wikipedia `Air pollution is the presence of substances in the atmosphere that are harmful to the health of humans and other living beings, or cause damage to the climate or to materials. There are many different types of air pollutants, such as gases (including ammonia, carbon monoxide, sulfur dioxide, nitrous oxides, methane, carbon dioxide and chlorofluorocarbons), particulates (both organic and inorganic), and biological molecules. Air pollution may cause diseases, allergies and even death to humans; it may also cause harm to other living organisms such as animals and food crops, and may damage the natural environment (for example, climate change, ozone depletion or habitat degradation) or built environment (for example, acid rain). Both human activity and natural processes can generate air pollution")),
                                                    br(),
-                                  
-                                                   h4(p("You can access the data on ",a("GitHub", href = "https://github.com/charleyferrari/CUNY_DATA608/tree/master/module3/data."))),
+                                                   
+                                                   h4(p("You can access the data on ",a("GitHub", href = "https://github.com/akarimhammoud/CUNY-SPS/tree/master/608_Data_Visualization/Final"))),
                                                    br(),
                                                    h5(p("For more info about the data you can access the provider system, at ",a("Kaggle", href = "https://www.kaggle.com/pavan9065/air-pollution"))),
                                                    br(),
                                                    h4(p("About the Author Karim Hammoud")),
                                                    h5(p("I hope you find it interesting and/or useful.  Any comments or questions are welcome at karimalhammoud@gmail.com"),
-                                                  br(),
-                                                  p("The source code for this Shiny app is available ", a("on github", href = "https://github.com/akarimhammoud/CUNY-SPS/tree/master/608_Data_Visualization"), ".")))
+                                                      br(),
+                                                      p("The source code for this Shiny app is available ", a("on github", href = "https://github.com/akarimhammoud/CUNY-SPS/tree/master/608_Data_Visualization/Final"), ".")))
              ),
              
              tabPanel("Analysis", DT::dataTableOutput("Analysis"),
                       
                       # Application title
-                      titlePanel('Global Air Poluttion in The Last 20-30 Years'),
+                      titlePanel('Global Air Pollution in The Last 20-30 Years'),
                       helpText("Karim Hammoud - CUNY 608 Knowledge and Visual Analytics DATA"),
                       
                       # Sidebar with a slider input for number of bins 
@@ -188,24 +213,31 @@ ui <- fluidPage(
                           selectInput('entity', 'Select Location', unique(df$Entity), selected='Afghanistan')),
                         
                         mainPanel(
-                          #selectInput('option_Graph', 'Type', c('bar','scatter'), selected='scatter'),                      # Option to Select Graph
-                          radioButtons("option_Graph", "Graph Type",
-                                       choiceNames = list(
-                                         #icon("glyphicon glyphicon-align-left", "fa-2x", lib = "glyphicon"),
-                                         HTML("<div style='font-size:1em; color:Tomato'> <i class='glyphicon glyphicon-record'></i>  Scatter </div"),
-                                         HTML("<div style='font-size:1em; color:Tomato'> <i class='glyphicon glyphicon-align-left'></i> Bar </div> ")
-                                       ),
-                                       choiceValues = list(
-                                         "scatter", 
-                                         "bar"
-                                       ),
-                                       inline = TRUE),
-                          #textOutput("txt"),
-                          plotlyOutput('plot1'),  # Option to zplot unsing plot.ly
-                          
-                          helpText("Global Air Pollution Death Rate per 100,000 persons."))
-                      )
-             )             
-  )
-)
+                          plotlyOutput('plot1'),
+                          helpText("Global Air Pollution Death Rate per 100,000 persons.")
+                          ))),
+             
+             tabPanel("Top Countries", DT::dataTableOutput("Top Countries"),
+                      
+                      # Application title
+                      helpText("Karim Hammoud - CUNY 608 Knowledge and Visual Analytics DATA"),
+                      
+                      mainPanel(
+                        
+                        titlePanel('Top countries with improved Air Quality 1990-2017'),
+                        plotlyOutput('plot2'),  
+                        
+                        titlePanel("Top Countries with least improved Air Quality 1990-2017"),
+                        plotlyOutput('plot3'),
+                        
+                        titlePanel("Conclusion"),
+                        h4(p("From the above two charts we can notice that there are countries that are more improving than others, the main ones that are improving are western countries while the countries that are getting worse in the last 27 years in terms of Air Pollution are mainly in the middle east and Africa, I think these countries should focus more on improving the Air Quality, we know also the Middle East is a large hub of oil and gas, so maybe that's one the main factors of the air quality."))                        
+                        
+                      ))
+             
+             
+             ))
+
+
+
 
