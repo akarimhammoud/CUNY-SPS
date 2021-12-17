@@ -1,4 +1,4 @@
-# Final Project 608 - Global Air Poluttion from 1990 to 2017
+# Final Project 608 - Global Air Pollution from 1990 to 2017
 
 ## You can access the [Visualization here](https://karimhammoud.shinyapps.io/final1/)
 
